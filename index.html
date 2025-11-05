@@ -29,12 +29,32 @@
     }
 
     /* === Top Bar === */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-    }
+    /* Top bar */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  position: absolute;
+  bottom: 0px;
+  margin: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 30px 40px 20px;
+  border-bottom: 2px solid  #1F3227;
+}
+
 
     .logo {
       font-size: 1.5rem;
@@ -67,17 +87,7 @@
       background-color: #1F3227;
     }
 
-    /* === Bottom Bar === */
-    .bottom-bar {
-      position: relative;
-      margin: 10px;
-      padding: 30px 40px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      width: 100%;
-      border-bottom: 2px solid #1F3227;
-    }
+
 
     .text-content {
       max-width: 60%;
@@ -139,6 +149,10 @@ letter-spacing: 0%;
 
     /* === Responsive Adjustments === */
     @media (max-width: 768px) {
+
+      body{
+        height: 120vh;
+      }
       .top-bar {
         padding: 15px 25px;
       }
@@ -160,17 +174,18 @@ letter-spacing: 0%;
       }
 
       .text-content h1 {
-        font-size: 1.4rem;
+        font-size: 3rem;
       }
 
       .text-content p {
-        font-size: 0.9rem;
+        font-size: 1.4rem;
         max-width: 100%;
       }
 
       .next-btn {
         align-self: flex-end;
-        font-size: 0.9rem;
+        font-size: 2rem;
+        margin: 10px;
       }
     }
 
@@ -350,49 +365,80 @@ letter-spacing: 0%;
 
 </body>
 <script>
-  // Array of background images (replace with your own)
-  const backgrounds = [
-    "Landing Page. Banner_1.png",
-    "Landing Page. Banner_2.png",
-    
-  ];
-
-  let currentIndex = 0;
   const body = document.body;
   const nextBtn = document.querySelector('.next-btn');
-
-  // Add a transition for smooth fade effect
-  body.style.transition = "background-image 0.6s ease-in-out";
-
-  nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % backgrounds.length;
-    body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
-  });
-
-  // pop up function
   const contactBtn = document.querySelector('.contact-btn');
   const overlay = document.querySelector('.overlay');
   const popup = document.querySelector('.popup');
   const closeBtn = document.querySelector('.popup .close-btn');
 
-  // Open popup
+  // Desktop and mobile background arrays
+  const desktopBackgrounds = [
+    "Landing Page. Banner_1.png",
+    "Landing Page. Banner_2.png"
+  ];
+
+  const mobileBackgrounds = [
+    "Mobile_Landing Page. Banner.png",
+    "Mobile_Landing Page. Banner2.png"
+  ];
+
+  let backgrounds = [];       // Current active array
+  let currentIndex = 0;       // Index of current background
+  let clickCount = 0;         // Track Next Image clicks
+
+  // Smooth background transition
+  body.style.transition = "background-image 0.6s ease-in-out";
+
+  // Function to choose background array based on viewport
+  function updateBackgroundArray() {
+    if (window.innerWidth <= 768) {
+      backgrounds = mobileBackgrounds;
+    } else {
+      backgrounds = desktopBackgrounds;
+    }
+    // Reset to first background when resizing
+    currentIndex = 0;
+    body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+  }
+
+  // Initial background setup
+  updateBackgroundArray();
+
+  // Update array on window resize
+  window.addEventListener('resize', updateBackgroundArray);
+
+  // Next Image button logic
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % backgrounds.length;
+    body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+
+    clickCount++;
+
+    // Open popup every 2nd click
+    if (clickCount % 2 === 0) {
+      overlay.style.display = 'block';
+      popup.style.display = 'block';
+    }
+  });
+
+  // Contact Us button logic
   contactBtn.addEventListener('click', () => {
     overlay.style.display = 'block';
     popup.style.display = 'block';
   });
 
-  // Close popup
+  // Close popup button
   closeBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
     popup.style.display = 'none';
   });
 
-  // Close when clicking outside popup
+  // Close popup when clicking outside
   overlay.addEventListener('click', () => {
     overlay.style.display = 'none';
     popup.style.display = 'none';
   });
-
-
 </script>
+
 </html>
