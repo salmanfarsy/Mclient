@@ -372,80 +372,215 @@ letter-spacing: 0%;
 
 </body>
 <script>
-  const body = document.body;
-  const nextBtn = document.querySelector('.next-btn');
-  const contactBtn = document.querySelector('.contact-btn');
-  const overlay = document.querySelector('.overlay');
-  const popup = document.querySelector('.popup');
-  const closeBtn = document.querySelector('.popup .close-btn');
+  (function () {
+    const body = document.body;
+    const nextBtn = document.querySelector('.next-btn');
+    const contactBtn = document.querySelector('.contact-btn');
+    const overlay = document.querySelector('.overlay');
+    const popup = document.querySelector('.popup');
+    const closeBtn = document.querySelector('.popup .close-btn');
 
-  // Desktop and mobile background arrays
-  const desktopBackgrounds = [
-    "Landing Page. Banner_1.png",
-    "Landing Page. Banner_2.png"
-  ];
+    // Desktop and mobile background arrays
+    const desktopBackgrounds = [
+      "Landing Page. Banner_1.png",
+      "Landing Page. Banner_2.png"
+    ];
 
-  const mobileBackgrounds = [
-    "Mobile_Landing Page. Banner2.png",
-    "Mobile_Landing Page. Banner.png"
-  ];
+    const mobileBackgrounds = [
+      "Mobile_Landing Page. Banner2.png",
+      "Mobile_Landing Page. Banner.png"
+    ];
 
-  let backgrounds = [];       // Current active array
-  let currentIndex = 0;       // Index of current background
-  let clickCount = 0;         // Track Next Image clicks
+    let backgrounds = [];
+    let currentIndex = 0;
+    let clickCount = 0;
+    let animating = false;
 
-  // Smooth background transition
-  // body.style.transition = "background-image 0.6s ease-in-out";
+    // --- Create slider layer (two slides) ---
+    const slider = document.createElement('div');
+    slider.className = 'bg-slider';
+    slider.style.position = 'fixed';
+    slider.style.top = '0';
+    slider.style.left = '0';
+    slider.style.width = '100%';
+    slider.style.height = '100%';
+    slider.style.pointerEvents = 'none';
+    slider.style.overflow = 'hidden';
+    slider.style.zIndex = '0'; // behind UI (we'll lift UI above this)
+    
+    const slideA = document.createElement('div');
+    const slideB = document.createElement('div');
+    [slideA, slideB].forEach(s => {
+      s.className = 'bg-slide';
+      s.style.position = 'absolute';
+      s.style.top = '0';
+      s.style.left = '0';
+      s.style.width = '100%';
+      s.style.height = '100%';
+      s.style.backgroundRepeat = 'no-repeat';
+      s.style.backgroundSize = 'cover';
+      s.style.backgroundPosition = 'center';
+      s.style.transform = 'translateX(0)';
+      s.style.transition = 'transform 600ms ease-in-out';
+    });
 
-  // Function to choose background array based on viewport
-  function updateBackgroundArray() {
-    if (window.innerWidth <= 768) {
-      backgrounds = mobileBackgrounds;
-    } else {
-      backgrounds = desktopBackgrounds;
+    slider.appendChild(slideA);
+    slider.appendChild(slideB);
+    // insert slider into DOM
+    // put it as the first child so it sits behind content when we set z-indexes
+    document.documentElement.insertBefore(slider, document.documentElement.firstChild);
+
+    // Ensure UI sits above slider (safe minimal changes)
+    const uiZIndex = 10;
+    const topBar = document.querySelector('.top-bar');
+    const bottomBar = document.querySelector('.bottom-bar');
+    if (topBar) topBar.style.zIndex = uiZIndex;
+    if (bottomBar) bottomBar.style.zIndex = uiZIndex;
+
+    // Make overlay and popup remain on top (they already have z-index in CSS)
+    // Ensure body background is initial image (fallback)
+    body.style.backgroundSize = 'cover';
+    body.style.backgroundPosition = 'center';
+    body.style.backgroundRepeat = 'no-repeat';
+
+    // Track which slide element currently shows the active image
+    let activeSlide = slideA;
+    let inactiveSlide = slideB;
+
+    // ---- Helper functions ----
+    function setBodyBackground(url) {
+      body.style.backgroundImage = `url('${url}')`;
     }
-    // Reset to first background when resizing
-    currentIndex = 0;
-    body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
-  }
 
-  // Initial background setup
-  updateBackgroundArray();
+    function setSlideBg(el, url) {
+      el.style.backgroundImage = `url('${url}')`;
+    }
 
-  // Update array on window resize
-  window.addEventListener('resize', updateBackgroundArray);
+    function swapSlides() {
+      [activeSlide, inactiveSlide] = [inactiveSlide, activeSlide];
+    }
 
-  // Next Image button logic
-  nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % backgrounds.length;
-    body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+    // Initialize backgrounds based on viewport
+    function updateBackgroundArray() {
+      if (window.innerWidth <= 768) {
+        backgrounds = mobileBackgrounds.slice();
+        // For mobile, use contain so whole image shows
+        slider.querySelectorAll('.bg-slide').forEach(s => s.style.backgroundSize = 'contain');
+        body.style.backgroundSize = 'contain';
+      } else {
+        backgrounds = desktopBackgrounds.slice();
+        slider.querySelectorAll('.bg-slide').forEach(s => s.style.backgroundSize = 'cover');
+        body.style.backgroundSize = 'cover';
+      }
+      currentIndex = 0;
+      // set both body and active slide to initial image
+      setBodyBackground(backgrounds[currentIndex]);
+      setSlideBg(activeSlide, backgrounds[currentIndex]);
+      // position active in center, inactive off-screen right (so next slide will come from left)
+      activeSlide.style.transform = 'translateX(0)';
+      inactiveSlide.style.transform = 'translateX(100%)';
+    }
 
-    clickCount++;
+    // animation: slide current -> right (out), next -> from left (in)
+    function slideToNext() {
+      if (animating) return;
+      if (!backgrounds || backgrounds.length === 0) return;
 
-    // Open popup every 2nd click
-    if (clickCount % 2 === 0) {
+      animating = true;
+      nextBtn.disabled = true;
+
+      // prepare next index
+      const nextIndex = (currentIndex + 1) % backgrounds.length;
+      // put next image on inactive slide and place it left off-screen
+      setSlideBg(inactiveSlide, backgrounds[nextIndex]);
+      inactiveSlide.style.transition = 'none';
+      inactiveSlide.style.transform = 'translateX(-100%)'; // start from left
+      // force reflow
+      void inactiveSlide.offsetWidth;
+
+      // animate: active -> translateX(100%) (move right/out), inactive -> translateX(0) (move to center)
+      activeSlide.style.transition = 'transform 600ms ease-in-out';
+      inactiveSlide.style.transition = 'transform 600ms ease-in-out';
+      activeSlide.style.transform = 'translateX(100%)';
+      inactiveSlide.style.transform = 'translateX(0)';
+
+      // when transition ends on inactiveSlide, finalize
+      const onTransitionEnd = (e) => {
+        // ensure we only handle the transform transition
+        if (e.propertyName !== 'transform') return;
+
+        // set body background to the new image (so the slider can be reused)
+        setBodyBackground(backgrounds[nextIndex]);
+
+        // reset slides: active becomes the new center slide element
+        // move the old active (now off-screen right) to be the inactive one, positioned off-screen right for next use
+        activeSlide.style.transition = 'none';
+        activeSlide.style.transform = 'translateX(100%)';
+        inactiveSlide.style.transition = 'none';
+        inactiveSlide.style.transform = 'translateX(0)';
+
+        // swap references so activeSlide always refers to the element showing the current background
+        swapSlides();
+
+        // clean up
+        inactiveSlide.style.transition = 'transform 600ms ease-in-out'; // keep consistent
+        activeSlide.style.transition = 'transform 600ms ease-in-out';
+        animating = false;
+        nextBtn.disabled = false;
+
+        // remove this handler
+        inactiveSlide.removeEventListener('transitionend', onTransitionEnd);
+      };
+
+      // listen for transitionend on inactiveSlide (which is sliding in)
+      inactiveSlide.addEventListener('transitionend', onTransitionEnd);
+
+      // update currentIndex for next time
+      currentIndex = nextIndex;
+    }
+
+    // init
+    updateBackgroundArray();
+    window.addEventListener('resize', updateBackgroundArray);
+
+    // Next Image button click -> slide
+    nextBtn.addEventListener('click', () => {
+      slideToNext();
+
+      // Popup logic: every 2nd click
+      clickCount++;
+      if (clickCount % 2 === 0) {
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+      }
+    });
+
+    // Popup logic (unchanged)
+    contactBtn.addEventListener('click', () => {
       overlay.style.display = 'block';
       popup.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      popup.style.display = 'none';
+    });
+
+    overlay.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      popup.style.display = 'none';
+    });
+
+    // Safety: if page uses body background initially via inline CSS, ensure slider started matching it
+    // If body had inline background set in HTML/CSS, keep sync
+    const computedBg = getComputedStyle(body).backgroundImage;
+    if (computedBg && computedBg !== 'none') {
+      // Set both slides to match initial body background
+      setSlideBg(activeSlide, backgrounds[currentIndex]);
+      setSlideBg(inactiveSlide, 'none');
     }
-  });
-
-  // Contact Us button logic
-  contactBtn.addEventListener('click', () => {
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
-  });
-
-  // Close popup button
-  closeBtn.addEventListener('click', () => {
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
-  });
-
-  // Close popup when clicking outside
-  overlay.addEventListener('click', () => {
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
-  });
+  })();
 </script>
+
 
 </html>
