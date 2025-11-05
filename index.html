@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Background Switcher</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: url('Landing Page. Banner_1.png');
+      background-size: cover;
+      background-position: center;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* === Top Bar === */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .logo img {
+  height: 100px;
+  width: auto;
+  display: block;
+}
+
+
+    .contact-btn {
+      background-color: #1F3227;
+      border: none;
+      font-family: 'DM Serif Display';
+      font-weight:400;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 1rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .contact-btn:hover {
+      background-color: #1F3227;
+    }
+
+    /* === Bottom Bar === */
+    .bottom-bar {
+      position: relative;
+      margin: 10px;
+      padding: 30px 40px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+      border-bottom: 2px solid #1F3227;
+    }
+
+    .text-content {
+      max-width: 60%;
+    }
+
+    .text-content h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #1F3227;
+    }
+
+    .text-content p {
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 400px;
+      color: #1F3227;
+    }
+
+    .next-btn {
+      background: none;
+      border: none;
+      color: #1F3227;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .next-btn:hover {
+      opacity: 0.8;
+    }
+
+    /* === Responsive Adjustments === */
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 15px 25px;
+      }
+
+      .contact-btn {
+        padding: 8px 18px;
+        font-size: 0.9rem;
+      }
+
+      .bottom-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 20px 25px;
+      }
+
+      .text-content {
+        max-width: 100%;
+      }
+
+      .text-content h1 {
+        font-size: 1.4rem;
+      }
+
+      .text-content p {
+        font-size: 0.9rem;
+        max-width: 100%;
+      }
+
+      .next-btn {
+        align-self: flex-end;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Dark semi-transparent overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: none; /* hidden by default */
+  z-index: 999; /* above everything */
+}
+
+/* Popup box */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background-color: white;
+  color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  display: none; /* hidden by default */
+  z-index: 1000; /* above overlay */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+/* Close button */
+.popup .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: black;
+  cursor: pointer;
+}
+
+.popup h2{
+color: #1F3227;
+}
+.popup p{
+color: #1F3227;
+}
+/* Contact form inside popup */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  
+}
+
+.contact-form input {
+  padding: 12px 15px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background-color: #1F32270F;
+  color: black;
+}
+
+.contact-form input::placeholder {
+  color: black;
+}
+
+/* Send button looks like Contact Us button */
+.send-btn {
+  background-color: #1F3227;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 1rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .popup {
+    padding: 25px 20px;
+  }
+
+  .contact-form input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .send-btn {
+    font-size: 0.95rem;
+    padding: 10px 18px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo">
+      <img src="HH_Green.svg" alt="logo">
+    </div>
+    <button class="contact-btn">
+       Contact Us <span><svg width="21" height="32" viewBox="0 0 21 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20.4349 15.6073L8.84484e-05 -2.74132e-05L11.0362 15.6075L8.38965e-05 31.2149L20.4349 15.6073Z" fill="#FFFFFF"/>
+</svg>
+</span>
+    </button>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="text-content">
+      <h1>Sip the Calm.<br> Feel the Lift. 
+
+      </h1>
+      <p>THC-infused sparkling drinks crafted for balance and clarity. Enjoy clean flavors, natural energy, and a smooth sense of elevation — no smoke, no stress.</p>
+    </div>
+    <button class="next-btn">
+      See Next
+       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path opacity="0.3" d="M14.2199 10.4024L6.91045 37.6814M14.2199 10.4024L18.9918 4.18417M14.2199 10.4024L37.4021 16.614M37.4021 16.614L36.3785 8.84292M37.4021 16.614L36.9452 18.319M30.0927 43.8931L6.91045 37.6814M30.0927 43.8931L27.7935 46.0478C27.289 46.5206 26.5761 46.6992 25.9083 46.5203L9.22066 42.0489C8.55281 41.8699 8.02475 41.3587 7.82424 40.697L6.91045 37.6814M30.0927 43.8931L31.0063 40.4832M18.9918 4.18417L36.3785 8.84292M18.9918 4.18417C18.1916 3.96976 17.7108 3.16962 17.9178 2.39702C18.1248 1.62441 18.9413 1.17191 19.7415 1.38632L37.1282 6.04506C37.9284 6.25948 38.4093 7.05961 38.2022 7.83222C37.9952 8.60482 37.1787 9.05733 36.3785 8.84292" stroke="#3F6B41" stroke-linecap="round"/>
+<path d="M47.1839 30.5921L32.5806 17.9112L40.1685 28.6421L15.9997 30.5921L40.1688 32.5421L32.5806 43.2733L47.1839 30.5921Z" fill="#3F6B41"/>
+</svg>
+
+    </button>
+  </div>
+  <!-- Dark overlay -->
+<div class="overlay"></div>
+
+<!-- Centered popup -->
+<!-- Centered popup -->
+<div class="popup">
+  <button class="close-btn">&times;</button>
+  <h2>Contact Us</h2>
+  <p>We would love to hear from you. Please fill out the form below and we'll get back to you shortly.</p>
+
+  <form class="contact-form">
+    <input type="text" placeholder="Name" required>
+    <input type="email" placeholder="Email" required>
+    <input type="tel" placeholder="Phone" required>
+    <button type="submit" class="send-btn">
+       Send
+    </button>
+  </form>
+</div>
+
+
+</body>
+<script>
+  // Array of background images (replace with your own)
+  const backgrounds = [
+    "Landing Page. Banner_1.png",
+    "Landing Page. Banner_2.png",
+    
+  ];
+
+  let currentIndex = 0;
+  const body = document.body;
+  const nextBtn = document.querySelector('.next-btn');
+
+  // Add a transition for smooth fade effect
+  body.style.transition = "background-image 0.6s ease-in-out";
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % backgrounds.length;
+    body.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+  });
+
+  // pop up function
+  const contactBtn = document.querySelector('.contact-btn');
+  const overlay = document.querySelector('.overlay');
+  const popup = document.querySelector('.popup');
+  const closeBtn = document.querySelector('.popup .close-btn');
+
+  // Open popup
+  contactBtn.addEventListener('click', () => {
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+  });
+
+  // Close popup
+  closeBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+  });
+
+  // Close when clicking outside popup
+  overlay.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+  });
+
+
+</script>
+</html>
