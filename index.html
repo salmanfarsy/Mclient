@@ -276,7 +276,7 @@
 }
 
 .cloud-container{
-  height: 110;
+  height: 110vh;
 }
      }
     @media (max-width: 400px){
@@ -299,15 +299,22 @@
         height: 15px;}
     }
     @media (max-width: 270px){
-.contact-btn{
-  font-size: 0.6rem;
-
+.contact-btn {
+  font-size: clamp(0.6rem, 2vw, 1rem);
 }
 .bg-slide{
   background-size: 100% 100%;
 }
     }
-    /* Handle small-height screens (landscape phones) */
+    
+
+  @media (max-width: 220px){
+.contact-btn {
+  font-size: 0.5rem;
+
+  } 
+  
+}/* Handle small-height screens (landscape phones) */
 @media (max-height: 500px) {
     .contact-btn{padding: 0;}
   .bottom-bar{padding: 5px;}
