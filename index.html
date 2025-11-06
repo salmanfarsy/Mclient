@@ -20,6 +20,23 @@
       position: relative;
       color: #fff;
     }
+    /* the Clouds */
+.cloud-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50vh; /* cloud height relative to viewport */
+  overflow: hidden;
+  z-index: 2;
+}
+
+.cloud-overlay {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills the container while keeping bottom anchored */
+  pointer-events: none;
+}
 
     /* Slider background container */
     .bg-slider {
@@ -266,6 +283,9 @@
 }
 
     @media (max-width: 768px) {
+      .cloud-container{
+        height: 80%;
+      }
       .top-bar { padding: 10px 20px; }
       .logo img { width: 50%; }
       .text-content{
@@ -280,12 +300,15 @@
       .text-content p { font-size: 0.8rem; }
       .next-btn { font-size: 0.9rem; align-self: flex-end; margin-bottom: 5px;  height: 0px;}
       .bg-slider{
-        height: 100vh;
+        height: 80vh;
       }
     }
     @media (max-width: 400px){
+      .cloud-container{
+        height: 100%;
+      }
         .bg-slide{
-          height: 120vh;
+          height: 80vh;
         }
         .text-content p{
           width: 100%;
@@ -302,6 +325,10 @@
   </style>
 </head>
 <body>
+  <div class="cloud-container">
+  <img src="vapor.png" class="cloud-overlay">
+</div>
+
   <!-- Background Slider -->
   <div class="bg-slider">
     <div class="bg-slide" style="background-image: url('Landing Page. Banner_1.png');"></div>
@@ -359,7 +386,9 @@
 
     // Background arrays
     const desktopBackgrounds = ['Landing Page. Banner_1.png','Landing Page. Banner_2.png'];
-    const mobileBackgrounds = ['Mobile_Landing Page. Banner2.png','Mobile_Landing Page. Banner.png'];
+    const mobileBackgrounds = ['mobile banner.png','mobile banner 2.png'];
+    const tabletBackgrounds  = ['NEW 768PX.png','NEWW 768PX.png'];
+
     let backgrounds = window.innerWidth <= 400 ? mobileBackgrounds : desktopBackgrounds;
 
     // Track slide
@@ -368,13 +397,22 @@
     let isAnimating = false;
 
     function updateBackgrounds() {
-      backgrounds = window.innerWidth <= 400 ? mobileBackgrounds : desktopBackgrounds;
-      slides[0].style.backgroundImage = `url('${backgrounds[0]}')`;
-      slides[1].style.backgroundImage = `url('${backgrounds[1]}')`;
-      currentIndex = 0;
-      slides[0].style.transform = 'translateX(0)';
-      slides[1].style.transform = 'translateX(100%)';
-    }
+  if (window.innerWidth <= 400) {
+    backgrounds = mobileBackgrounds;
+  } else if (window.innerWidth <= 768) {
+    backgrounds = tabletBackgrounds;
+  } else {
+    backgrounds = desktopBackgrounds;
+  }
+
+  slides[0].style.backgroundImage = `url('${backgrounds[0]}')`;
+  slides[1].style.backgroundImage = `url('${backgrounds[1]}')`;
+
+  currentIndex = 0;
+  slides[0].style.transform = 'translateX(0)';
+  slides[1].style.transform = 'translateX(100%)';
+}
+
 
     window.addEventListener('resize', updateBackgrounds);
 
