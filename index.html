@@ -248,43 +248,7 @@
     }
       }
     
-    /* Handle small-height screens (landscape phones) */
-@media (max-height: 500px) {
-    .contact-btn{padding: 0;}
-  .bottom-bar{padding: 5px;}
-      .next-btn{margin: 0;
-        margin-bottom: 15px;
-        height: 15px;}
-  .text-content h1 {
-    font-size: 1.2rem;
-    line-height: 1.1;
-  }
-.logo img{
-  width: 25%;
-}
-  .text-content p {
-    font-size: 0.75rem;
-  }
-.bg-slider{
-  height: 100%;
-}
-  .contact-btn, .next-btn {
-    transform: scale(0.5);
-  }
-
-  .popup {
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .bg-slide {
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 100%;
-  }
-}
-
+    
     @media (max-width: 768px) {
       .cloud-container{
         height: 80%;
@@ -310,8 +274,9 @@
 .bg-slider{
   height: 70vh;
 }
+
 .cloud-container{
-  height: 110%;
+  height: 110;
 }
      }
     @media (max-width: 400px){
@@ -333,6 +298,62 @@
         margin-bottom: 15px;
         height: 15px;}
     }
+    @media (max-width: 270px){
+.contact-btn{
+  font-size: 0.6rem;
+
+}
+.bg-slide{
+  background-size: 100% 100%;
+}
+    }
+    /* Handle small-height screens (landscape phones) */
+@media (max-height: 500px) {
+    .contact-btn{padding: 0;}
+  .bottom-bar{padding: 5px;}
+      .next-btn{margin: 0;
+        margin-bottom: 15px;
+        height: 15px;}
+  .text-content h1 {
+    font-size: 1.2rem;
+    line-height: 1.1;
+  }
+.logo img{
+  width: 25%;
+}
+  .text-content p {
+    font-size: 0.5rem;
+  }
+.bg-slider{
+  height: 100%;
+}
+  .contact-btn, .next-btn {
+    transform: scale(0.5);
+  }
+
+  .popup {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .bg-slide {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+  }
+}
+@media (max-height: 300px){
+  .text-content h1 {
+    font-size: 1rem;
+    line-height: 1rem;
+    
+  }
+  .next-btn{
+    height: 0;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -412,7 +433,10 @@
     backgrounds = mobileBackgrounds;
   } else if (window.innerWidth <= 768) {
     backgrounds = tabletBackgrounds;
-  } else {
+  } else if (window.innerHeight < window.innerWidth) {
+  backgrounds = desktopBackgrounds; // landscape orientation
+  }
+   else {
     backgrounds = desktopBackgrounds;
   }
 
