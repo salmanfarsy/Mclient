@@ -219,13 +219,19 @@
     @media (max-width: 768px) {
       .top-bar { padding: 10px 20px; }
       .logo img { width: 50%; }
+      .text-content{
+        max-width: 100%;
+      }
+      .text-content p{
+        width: 100%;
+      }
       .contact-btn { padding: 5px 12px; font-size: 0.8rem; }
       .bottom-bar { flex-direction: column; align-items: flex-start; padding: 20px; gap: 10px; }
-      .text-content h1 { font-size: 3rem; }
+      .text-content h1 { font-size: 1.5rem; }
       .text-content p { font-size: 0.8rem; }
-      .next-btn { font-size: 0.9rem; align-self: flex-end; margin-top: 5px; }
+      .next-btn { font-size: 0.9rem; align-self: flex-end; margin-bottom: 5px;  height: 0px;}
       .bg-slider{
-        height: 1500px;
+        height: 100vh;
       }
     }
     @media (max-width: 400px){
@@ -305,7 +311,7 @@
     // Background arrays
     const desktopBackgrounds = ['Landing Page. Banner_1.png','Landing Page. Banner_2.png'];
     const mobileBackgrounds = ['Mobile_Landing Page. Banner2.png','Mobile_Landing Page. Banner.png'];
-    let backgrounds = window.innerWidth <= 768 ? mobileBackgrounds : desktopBackgrounds;
+    let backgrounds = window.innerWidth <= 400 ? mobileBackgrounds : desktopBackgrounds;
 
     // Track slide
     let currentIndex = 0;
@@ -313,7 +319,7 @@
     let isAnimating = false;
 
     function updateBackgrounds() {
-      backgrounds = window.innerWidth <= 768 ? mobileBackgrounds : desktopBackgrounds;
+      backgrounds = window.innerWidth <= 400 ? mobileBackgrounds : desktopBackgrounds;
       slides[0].style.backgroundImage = `url('${backgrounds[0]}')`;
       slides[1].style.backgroundImage = `url('${backgrounds[1]}')`;
       currentIndex = 0;
@@ -348,10 +354,6 @@
   }, 1000);
 
   clickCount++;
-  if (clickCount % 2 === 0) {
-    overlay.style.display = 'block';
-    popup.style.display = 'block';
-  }
 });
 
     // Contact popup
