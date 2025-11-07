@@ -37,7 +37,9 @@
   object-fit: cover; /* fills the container while keeping bottom anchored */
   pointer-events: none;
 }
-
+.top-bar img{
+  width: 200px;
+}
     /* Slider background container */
     .bg-slider {
       position: fixed;
@@ -251,18 +253,13 @@
     
     @media (max-width: 768px) {
       .cloud-container{
-        height: 80%;
+        height: 115%;
       }
       .top-bar { padding: 10px 20px; }
       .logo img { width: 50%; }
       .text-content{
         max-width: 100%;
       }
-      /*  */
-       .bg-slide{
-      background-size: 100% 100%;
-    }
-      /*  */
       .text-content p{
         width: 100%;
       }
@@ -272,10 +269,10 @@
       .text-content p { font-size: 0.8rem; }
       .next-btn { font-size: 0.9rem; align-self: flex-end; margin-bottom: 5px;  height: 0px;}
       .bg-slider{
-        height: 75vh;
+        height: 80vh;
       }
       .bg-slide{
-       background-size: cover; 
+       background-size: 100% 100%; 
     background-repeat: no-repeat; 
     background-position: center;
      height: 100%;
@@ -283,11 +280,10 @@
     }
      @media (max-width: 500px){
 .bg-slider{
-  height: 70dvh;
+  height: 75vh;
 }
-
  .cloud-container{
-        height: 105%;
+        height: 125%;
         background-position: center;
       }
 
@@ -296,7 +292,7 @@
 } */
 /* testing */
 .bg-slide{
-       background-size: cover;
+       background-size: 100% 100%; 
     background-repeat: no-repeat; 
     background-position: center;
      height: 100%;
@@ -478,7 +474,7 @@
     // Background arrays
     const desktopBackgrounds = ['Landing Page. Banner_1.png','Landing Page. Banner_2.png'];
     const mobileBackgrounds = ['mobile banner.png','mobile banner 2.png'];
-    const tabletBackgrounds  = ['New 880PX.png','NEW 2 880PX.png'];
+    const tabletBackgrounds  = ['NEW 768PX.png','NEWW 768PX.png'];
 
     let backgrounds = window.innerWidth <= 400 ? mobileBackgrounds : desktopBackgrounds;
 
