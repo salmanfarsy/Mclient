@@ -251,7 +251,7 @@
     
     @media (max-width: 768px) {
       .cloud-container{
-        height: 115%;
+        height: 80%;
       }
       .top-bar { padding: 10px 20px; }
       .logo img { width: 50%; }
@@ -269,47 +269,23 @@
       .bg-slider{
         height: 80vh;
       }
-      .bg-slide{
-       background-size: 100% 100%; 
-    background-repeat: no-repeat; 
-    background-position: center;
-     height: 100%;
-}
     }
      @media (max-width: 500px){
 .bg-slider{
-  height: 75vh;
+  height: 70vh;
 }
- .cloud-container{
-        height: 125%;
-        background-position: center;
-      }
 
-/* .cloud-container{
+.cloud-container{
   height: 110vh;
-} */
-/* testing */
-.bg-slide{
-       background-size: 100% 100%; 
-    background-repeat: no-repeat; 
-    background-position: center;
-     height: 100%;
-} 
+}
      }
-
     @media (max-width: 400px){
       .cloud-container{
         height: 100%;
       }
-        /* .bg-slide{
+        .bg-slide{
           height: 80vh;
-        } */
-
-        /* testing */
-        .bg-slider{
-  height: 70vh;
-}
-/*  */
+        }
         .text-content p{
           width: 100%;
         }
@@ -321,17 +297,6 @@
       .next-btn{margin: 0;
         margin-bottom: 15px;
         height: 15px;}
-        /* Cloud solved */
-        .cloud-container{
-  height: 110vh;
-  /*  */
-  
-}
-/* testing */
-.bg-slide{
-  background-size: 100% 100%;
-}
-/*  */
     }
     @media (max-width: 270px){
 .contact-btn {
@@ -361,7 +326,7 @@
 }
 
 /* Handle small-height screens (landscape phones) */
-/* @media (max-height: 500px) {
+@media (max-height: 500px) {
     .contact-btn{padding: 0;}
   .bottom-bar{padding: 5px;}
       .next-btn{margin: 0;
@@ -405,7 +370,7 @@
   .next-btn{
     height: 0;
   }
-} */
+}
 
   </style>
 </head>
@@ -472,7 +437,7 @@
     // Background arrays
     const desktopBackgrounds = ['Landing Page. Banner_1.png','Landing Page. Banner_2.png'];
     const mobileBackgrounds = ['mobile banner.png','mobile banner 2.png'];
-    const tabletBackgrounds  = ['NEW 768PX.png','NEWW 768PX.png'];
+    const tabletBackgrounds  = ['Landing Page. Banner_1.png','Landing Page. Banner_2.png'];
 
     let backgrounds = window.innerWidth <= 400 ? mobileBackgrounds : desktopBackgrounds;
 
